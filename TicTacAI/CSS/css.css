@@ -1,0 +1,175 @@
+body {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+    transition: background 0.2s linear;
+  }
+
+.board {
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    float: left;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    width: 200px;
+    height: 200px;
+}
+
+.vSeparator {
+    height: 200px;
+    width: 10px;
+    background-color: black;
+}
+
+.hSeparator {
+    height: 10px;
+    width: 600px;
+    background-color: black;
+}
+
+.container {
+    background-color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 80%;
+}
+
+#pieceContainer {
+    width: 200px;
+    height: 400px;
+}
+
+#xcontainer{
+    width: 200px;
+    height: 200px;
+}
+
+#ocontainer{
+    width: 200px;
+    height: 200px;
+}
+
+.piece{
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+
+.disable-drag {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  #overlayDiv {
+    /* Resto de los estilos del div */
+    animation: fadeIn 2s forwards; /* Duración y dirección de la animación */
+    backdrop-filter: blur(5px); /* Aplica el efecto de desenfoque */
+  }
+
+  #contentDivWin{
+    width: 400px;
+    height: 200px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    padding: 20px;
+    box-shadow: 10px 10px 0px rgb(0, 207, 52);
+  }
+
+
+  #contentDivTie{
+    width: 400px;
+    height: 200px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    padding: 20px;
+    box-shadow: 10px 10px 0px rgb(110, 110, 110);
+  }
+
+
+  #contentDivLoss{
+    width: 400px;
+    height: 200px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    padding: 20px;
+    box-shadow: 10px 10px 0px rgb(255, 0, 0);
+  }
+
+
+
+
+body.dark {background-color: #292c35;} /* #9b59b6 */
+
+body.dark h1, body.dark a {color: #fff;}
+
+.vSeparator.dark,.hSeparator.dark{background-color: #5b6176;}
+.container.dark{background-color: #333642;}
+
+.draggedImage.dark{
+        opacity: 0.7;
+}
+
+#checkboxContainer {
+    top: 10px;
+    position: absolute;
+  }
+.checkbox {
+  opacity: 0;
+}
+
+.checkbox-label {
+  background-color: #111;
+  width: 50px;
+  height: 26px;
+  border-radius: 50px;
+  position: relative;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-moon {color: #f1c40f;}
+
+.fa-sun {color: #f39c12;}
+
+.checkbox-label .ball {
+  background-color: #fff;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+.checkbox:checked + .checkbox-label .ball {
+  transform: translateX(24px);
+}
