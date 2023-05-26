@@ -1,4 +1,5 @@
 var player;
+
 document.addEventListener("DOMContentLoaded", function () {
   var cells = document.querySelectorAll(".cell");
 
@@ -17,23 +18,17 @@ document.addEventListener("DOMContentLoaded", function () {
         tempDiv.innerHTML = draggedImageHTML;
         var draggedImage = tempDiv.querySelector(".draggedImage");
 
-        if (draggedImage) {
+        if (draggedImage && draggedImage.classList.contains("X")) {
           cell.appendChild(draggedImage);
           actualizarTablero();
           draggedImage.classList.add("disable-drag");
-
-          if (draggedImage.classList.contains("X")) { player = 'O'; } else {
-            player = 'X';
-          }
+          player = 'O';
 
           const depth = 7;
-
           const tree = construirArbolDecisiones(board, player, depth);
           elegirArray(tree.children);
           console.log(tree);
           actualizarTablero();
-
-
         }
       }
 
@@ -47,18 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
           textAreaOverWin();
         }, 1500);
-
       }
-      if (win(board) == player) { // Cambio en la condición
+      if (win(board) == player) {
         disableDragAndDrop();
         setTimeout(() => {
-          textAreaOverLoss(); // Primero mostrar el texto
+          textAreaOverLoss();
         }, 1500);
       }
-      if (win(board) == "tie") { // Cambio en la condición
+      if (win(board) == "tie") {
         disableDragAndDrop();
         setTimeout(() => {
-          textAreaOverTie(); // Primero mostrar el texto
+          textAreaOverTie();
         }, 1500);
       }
     });
@@ -67,7 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
   var draggedImages = document.querySelectorAll(".draggedImage");
   draggedImages.forEach(function (draggedImage) {
     draggedImage.addEventListener("dragstart", function (e) {
-      e.dataTransfer.setData("text/html", this.outerHTML);
+      if (draggedImage.classList.contains("X")) {
+        e.dataTransfer.setData("text/html", this.outerHTML);
+      } else {
+        e.preventDefault();
+      }
     });
   });
 });
@@ -84,6 +82,4 @@ function disableDragAndDrop() {
       // Resto de la lógica para manejar el evento drop
     });
   });
-
-
 }

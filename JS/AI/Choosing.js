@@ -45,7 +45,7 @@ function elegirArray(nodes) {
         var nodoPuntMax = nodes[0];
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
-            if (node && node.puntuacion && puntuacion < node.puntuacion) {
+            if ( puntuacion <= node.puntuacion) {
                 puntuacion = node.puntuacion;
                 nodoPuntMax = node;
             }
