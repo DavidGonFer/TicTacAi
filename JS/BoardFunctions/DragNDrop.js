@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
           draggedImage.classList.add("disable-drag");
           player = 'O';
 
-          const depth = 7;
+          const depth = 20;
           const tree = construirArbolDecisiones(board, player, depth);
           elegirArray(tree.children);
           console.log(tree);

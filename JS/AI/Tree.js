@@ -16,8 +16,8 @@ function construirArbolDecisiones(board, player, depth, alpha = -Infinity, beta 
 
     const child = construirArbolDecisiones(node.board, opponent, depth - 1, alpha, beta);
 
-    node.puntuacion = evaluarMovimiento(child);
-    
+    node.puntuacion = (evaluarMovimiento(child)/depth);
+   
     root.children.push(node);
 
     if (player === 'X') {
@@ -35,22 +35,22 @@ function construirArbolDecisiones(board, player, depth, alpha = -Infinity, beta 
 }
 
 function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
+  
   if (win(node.board) !== null) {
     if (win(node.board) === "O") {
       return 1;
     } else if (win(node.board) === "X") {
-      return -1; // Bloquear a "X" tiene una alta prioridad
+      return -10; // Bloquear a "X" tiene una alta prioridad
     } else {
       return 0;
     }
   } else {
-    if (node.player === "X") {
+    if (node.player === "O") {
       let maxScore = -Infinity;
 
       for (let i = 0; i < node.children.length; i++) {
         const child = node.children[i];
         let score = evaluarMovimiento(child, alpha, beta);
-
         maxScore = Math.max(maxScore, score);
         alpha = Math.max(alpha, maxScore);
         
@@ -68,21 +68,7 @@ function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
         const child = node.children[i];
         let score = evaluarMovimiento(child, alpha, beta);
         
-        
-        if (evaluarBloqueo(child.board, "O") == "O" && hayHuecosLibres(child.board)==false) {
-            score += 1; // Incentivar el bloqueo de movimientos ganadores de "X"
-        }
-        
-        if (win(child.board) === "O") {
-          score += 1; // Incentivar la victoria de "O"
-        } else {
-          score -= 1;
-        }
-        for(let j=0;j<child.children.length;j++){
-          if(win(child.children[j].board)=="X"){
-            score-=11;
-          }
-        }
+
         
 
         minScore = Math.min(minScore, score);
@@ -95,7 +81,7 @@ function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
         }
       }
 
-      const averageScore = totalScore / calcularProfundidad(node);
+      const averageScore = totalScore;
 
       return averageScore;
     }
@@ -125,9 +111,12 @@ function generarNodosPosibles(board, player, depth) {
         };
 
         const opponent = player === 'X' ? 'O' : 'X';
-        const childNodes = generarNodosPosibles(newBoard, opponent, depth - 1);
 
-        newNode.children = childNodes;
+        if (win(newNode.board) === null) {
+          const childNodes = generarNodosPosibles(newBoard, opponent, depth - 1);
+          newNode.children = childNodes;
+        }
+
         nodes.push(newNode);
       }
     }
@@ -138,25 +127,4 @@ function generarNodosPosibles(board, player, depth) {
 
 
 
-function calcularProfundidad(node) {
-  // Caso base: si el nodo no tiene hijos, la profundidad es 0
-  if (node.children.length === 0) {
-    return 0;
-  }
 
-  let maxProfundidad = 0;
-
-  // Recorrer los hijos del nodo
-  for (const child of node.children) {
-    // Calcular la profundidad del hijo actual de forma recursiva
-    const profundidadHijo = calcularProfundidad(child);
-
-    // Actualizar la máxima profundidad encontrada
-    if (profundidadHijo > maxProfundidad) {
-      maxProfundidad = profundidadHijo;
-    }
-  }
-
-  // La profundidad del nodo actual es la máxima profundidad encontrada en sus hijos, más 1
-  return maxProfundidad + 1;
-}
