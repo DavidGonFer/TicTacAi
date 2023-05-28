@@ -16,7 +16,7 @@ function construirArbolDecisiones(board, player, depth, alpha = -Infinity, beta 
 
     const child = construirArbolDecisiones(node.board, opponent, depth - 1, alpha, beta);
 
-    node.puntuacion = (evaluarMovimiento(child)/depth);
+    node.puntuacion = (evaluarMovimiento(child));
    
     root.children.push(node);
 
@@ -35,12 +35,12 @@ function construirArbolDecisiones(board, player, depth, alpha = -Infinity, beta 
 }
 
 function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
-  
-  if (win(node.board) !== null) {
-    if (win(node.board) === "O") {
-      return 1;
-    } else if (win(node.board) === "X") {
-      return -10; // Bloquear a "X" tiene una alta prioridad
+  const winner = win(node.board);
+  if (winner !== null) {
+    if (winner === "O") {
+      return 2 - countEmptyNodes(node)*10; // Aumenta la puntuación basada en los nodos vacíos restantes
+    } else if (winner === "X") {
+      return -10 + countEmptyNodes(node); // Disminuye la puntuación basada en los nodos vacíos restantes
     } else {
       return 0;
     }
@@ -53,7 +53,7 @@ function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
         let score = evaluarMovimiento(child, alpha, beta);
         maxScore = Math.max(maxScore, score);
         alpha = Math.max(alpha, maxScore);
-        
+
         if (alpha >= beta) {
           break;
         }
@@ -67,9 +67,6 @@ function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
       for (let i = 0; i < node.children.length; i++) {
         const child = node.children[i];
         let score = evaluarMovimiento(child, alpha, beta);
-        
-
-        
 
         minScore = Math.min(minScore, score);
         beta = Math.min(beta, minScore);
@@ -87,6 +84,29 @@ function evaluarMovimiento(node, alpha = -Infinity, beta = Infinity) {
     }
   }
 }
+
+function countEmptyNodes(node) {
+  let count = 0;
+  traverse(node);
+
+  function traverse(node) {
+    if (win(node.board) !== null) {
+      return;
+    }
+
+    if (node.children.length === 0) {
+      count++;
+      return;
+    }
+
+    for (let i = 0; i < node.children.length; i++) {
+      traverse(node.children[i]);
+    }
+  }
+
+  return count;
+}
+
 
 
 
